@@ -250,9 +250,12 @@
           var placeholder = el.wrap('<div style="display: none;" />').parent(),
               rootElement = this.settings.rootElement || 'body';
 
-          el.on('closed.fndtn.reveal.wrapped', function() {
-            el.detach().appendTo(placeholder);
-            el.unwrap().unbind('closed.fndtn.reveal.wrapped');
+          el.on('closed.fndtn.reveal.wrapped', function( ev ) {
+            // Unwrap the reveal & put it back where it came from, but only if the close event is for the reveal object itself
+            if ($(el)[0] == ev.target) {
+              el.detach().appendTo(placeholder);
+              el.unwrap().unbind('closed.fndtn.reveal.wrapped');
+            }
           });
 
           el.detach().appendTo(rootElement);
